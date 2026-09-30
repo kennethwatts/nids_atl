@@ -1,0 +1,107 @@
+=== Main cold-start ablation ===
+  [dedup] 2017: 100000 -> 29941 rows (29.9% kept)
+  [dedup] 2018: 100000 -> 15081 rows (15.1% kept)
+[main] pretraining source model...
+  [pretrain] final epoch loss: 0.0284
+[main] frozen model static target-domain AUROC (full corpus): 0.5852
+  [main] MC run 1/30 done (45.9s elapsed)
+  [main] MC run 2/30 done (92.8s elapsed)
+  [main] MC run 3/30 done (139.0s elapsed)
+  [main] MC run 4/30 done (184.4s elapsed)
+  [main] MC run 5/30 done (229.7s elapsed)
+  [main] MC run 6/30 done (274.8s elapsed)
+  [main] MC run 7/30 done (320.5s elapsed)
+  [main] MC run 8/30 done (365.1s elapsed)
+  [main] MC run 9/30 done (409.9s elapsed)
+  [main] MC run 10/30 done (455.1s elapsed)
+  [main] MC run 11/30 done (500.3s elapsed)
+  [main] MC run 12/30 done (545.8s elapsed)
+  [main] MC run 13/30 done (591.3s elapsed)
+  [main] MC run 14/30 done (636.9s elapsed)
+  [main] MC run 15/30 done (682.3s elapsed)
+  [main] MC run 16/30 done (727.2s elapsed)
+  [main] MC run 17/30 done (772.4s elapsed)
+  [main] MC run 18/30 done (817.7s elapsed)
+  [main] MC run 19/30 done (862.6s elapsed)
+  [main] MC run 20/30 done (908.0s elapsed)
+  [main] MC run 21/30 done (953.3s elapsed)
+  [main] MC run 22/30 done (998.6s elapsed)
+  [main] MC run 23/30 done (1043.7s elapsed)
+  [main] MC run 24/30 done (1089.9s elapsed)
+  [main] MC run 25/30 done (1134.8s elapsed)
+  [main] MC run 26/30 done (1179.5s elapsed)
+  [main] MC run 27/30 done (1224.3s elapsed)
+  [main] MC run 28/30 done (1270.1s elapsed)
+  [main] MC run 29/30 done (1315.0s elapsed)
+  [main] MC run 30/30 done (1360.0s elapsed)
+
+=== MAIN (attack-class precision/recall/F1/PR-AUC) ===
+-- n=100 --
+  1_base_tl                P=0.0333 R=0.0167 attackF1=0.0222 PR-AUC=0.1225
+  3_tl_aqt                 P=0.0000 R=0.0000 attackF1=0.0000 PR-AUC=0.1225
+  5a_full_atl_oracle       P=0.0000 R=0.0000 attackF1=0.0000 PR-AUC=0.1022
+  5b_full_atl_pseudo       P=0.0000 R=0.0000 attackF1=0.0000 PR-AUC=0.1057
+-- n=1000 --
+  1_base_tl                P=0.0333 R=0.0042 attackF1=0.0074 PR-AUC=0.0384
+  3_tl_aqt                 P=0.0289 R=0.0086 attackF1=0.0125 PR-AUC=0.0384
+  5a_full_atl_oracle       P=0.0000 R=0.0000 attackF1=0.0000 PR-AUC=0.0320
+  5b_full_atl_pseudo       P=0.0167 R=0.0019 attackF1=0.0033 PR-AUC=0.0347
+-- n=5000 --
+  1_base_tl                P=0.1333 R=0.0032 attackF1=0.0063 PR-AUC=0.0234
+  3_tl_aqt                 P=0.0464 R=0.0403 attackF1=0.0430 PR-AUC=0.0234
+  5a_full_atl_oracle       P=0.0066 R=0.0025 attackF1=0.0036 PR-AUC=0.0166
+  5b_full_atl_pseudo       P=0.0375 R=0.0281 attackF1=0.0320 PR-AUC=0.0193
+-- n=10000 --
+  1_base_tl                P=0.1667 R=0.0022 attackF1=0.0043 PR-AUC=0.0205
+  3_tl_aqt                 P=0.0472 R=0.0435 attackF1=0.0452 PR-AUC=0.0205
+  5a_full_atl_oracle       P=0.0048 R=0.0029 attackF1=0.0036 PR-AUC=0.0144
+  5b_full_atl_pseudo       P=0.0385 R=0.0341 attackF1=0.0361 PR-AUC=0.0174
+-- n=20000 --
+  1_base_tl                P=0.2333 R=0.0015 attackF1=0.0030 PR-AUC=0.0183
+  3_tl_aqt                 P=0.0453 R=0.0443 attackF1=0.0448 PR-AUC=0.0183
+  5a_full_atl_oracle       P=0.0035 R=0.0028 attackF1=0.0031 PR-AUC=0.0131
+  5b_full_atl_pseudo       P=0.0384 R=0.0377 attackF1=0.0380 PR-AUC=0.0152
+
+=== Infiltration case study ===
+[infiltration] pretraining source model...
+  [pretrain] final epoch loss: 0.0284
+[infiltration] frozen model static target-domain AUROC (full corpus): 0.5009
+  [infiltration] MC run 1/30 done (11.8s elapsed)
+  [infiltration] MC run 2/30 done (24.0s elapsed)
+  [infiltration] MC run 3/30 done (35.5s elapsed)
+  [infiltration] MC run 4/30 done (47.3s elapsed)
+  [infiltration] MC run 5/30 done (58.9s elapsed)
+  [infiltration] MC run 6/30 done (70.4s elapsed)
+  [infiltration] MC run 7/30 done (81.5s elapsed)
+  [infiltration] MC run 8/30 done (93.3s elapsed)
+  [infiltration] MC run 9/30 done (104.9s elapsed)
+  [infiltration] MC run 10/30 done (116.3s elapsed)
+  [infiltration] MC run 11/30 done (128.1s elapsed)
+  [infiltration] MC run 12/30 done (139.9s elapsed)
+  [infiltration] MC run 13/30 done (151.1s elapsed)
+  [infiltration] MC run 14/30 done (162.7s elapsed)
+  [infiltration] MC run 15/30 done (174.2s elapsed)
+  [infiltration] MC run 16/30 done (185.8s elapsed)
+  [infiltration] MC run 17/30 done (197.4s elapsed)
+  [infiltration] MC run 18/30 done (208.9s elapsed)
+  [infiltration] MC run 19/30 done (220.2s elapsed)
+  [infiltration] MC run 20/30 done (231.8s elapsed)
+  [infiltration] MC run 21/30 done (243.1s elapsed)
+  [infiltration] MC run 22/30 done (254.3s elapsed)
+  [infiltration] MC run 23/30 done (265.5s elapsed)
+  [infiltration] MC run 24/30 done (277.0s elapsed)
+  [infiltration] MC run 25/30 done (289.0s elapsed)
+  [infiltration] MC run 26/30 done (301.9s elapsed)
+  [infiltration] MC run 27/30 done (313.8s elapsed)
+  [infiltration] MC run 28/30 done (325.3s elapsed)
+  [infiltration] MC run 29/30 done (336.4s elapsed)
+  [infiltration] MC run 30/30 done (348.3s elapsed)
+
+=== INFILTRATION (attack-class precision/recall/F1/PR-AUC) ===
+-- n=7200 --
+  1_base_tl                P=0.0100 R=0.9741 attackF1=0.0199 PR-AUC=0.0100
+  3_tl_aqt                 P=0.0067 R=0.0005 attackF1=0.0009 PR-AUC=0.0100
+  5a_full_atl_oracle       P=0.0067 R=0.0005 attackF1=0.0009 PR-AUC=0.0100
+  5b_full_atl_pseudo       P=0.0067 R=0.0005 attackF1=0.0009 PR-AUC=0.0100
+
+Saved: precision_recall_main_results.csv, precision_recall_infiltration_results.csv, static_auroc_results.json
