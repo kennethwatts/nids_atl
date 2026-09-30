@@ -1,0 +1,18 @@
+Loading data, pretraining source model (identical to verified_pipeline.py)...
+  [dedup] 2017: 100000 -> 29941 rows (29.9% kept)
+  [dedup] 2018: 100000 -> 15081 rows (15.1% kept)
+  [pretrain] final epoch loss: 0.0284
+  q=0.8 done (126.0s elapsed)
+  q=0.85 done (256.1s elapsed)
+  q=0.9 done (384.7s elapsed)
+  q=0.95 done (511.5s elapsed)
+  q=0.99 done (639.7s elapsed)
+
+=== AQT QUANTILE SENSITIVITY (macro-F1, mean +/- std, 30 MC runs) ===
+  q=0.8: F1@100=0.544, F1@1000=0.469, F1@5000=0.457, F1@10000=0.455, F1@20000=0.455
+  q=0.85: F1@100=0.580, F1@1000=0.478, F1@5000=0.469, F1@10000=0.468, F1@20000=0.467
+  q=0.9: F1@100=0.631, F1@1000=0.490, F1@5000=0.484, F1@10000=0.483, F1@20000=0.482
+  q=0.95: F1@100=0.631, F1@1000=0.502, F1@5000=0.500, F1@10000=0.499, F1@20000=0.499
+  q=0.99: F1@100=0.631, F1@1000=0.503, F1@5000=0.517, F1@10000=0.518, F1@20000=0.518
+
+Saved: aqt_quantile_sensitivity_results.csv, aqt_quantile_sensitivity_raw.json
