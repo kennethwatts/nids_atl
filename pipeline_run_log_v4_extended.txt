@@ -1,0 +1,51 @@
+Loading real pipeline data (10-feature robust_2017/2018_final.csv)...
+  [dedup] 2017: 100000 -> 29941 rows (29.9% kept)
+  [dedup] 2018: 100000 -> 15081 rows (15.1% kept)
+  input_dim = 10, features = ['Bwd_Pkt_Len_Std', 'Pkt_Len_Var', 'Pkt_Size_Avg', 'Pkt_Len_Std', 'Bwd_Seg_Size_Avg', 'Bwd_Pkt_Len_Mean', 'Subflow_Bwd_Byts', 'Pkt_Len_Mean', 'Tot_Len_Fwd_Pkts', 'Subflow_Fwd_Bytes']
+  source (2017): 29941 rows, 18.3% attack
+  target (2018): 15081 rows, 5.3% attack
+  simulating cold-start stream at 1.0% malicious rate
+  AQT: W=500, q=0.99  |  Monte Carlo runs: 30
+
+Pretraining source-domain model on 2017 data...
+  [pretrain] final epoch loss: 0.0284
+  MC run 1/30 done (60.5s elapsed)
+  MC run 2/30 done (124.9s elapsed)
+  MC run 3/30 done (189.1s elapsed)
+  MC run 4/30 done (250.9s elapsed)
+  MC run 5/30 done (312.6s elapsed)
+  MC run 6/30 done (374.8s elapsed)
+  MC run 7/30 done (438.8s elapsed)
+  MC run 8/30 done (499.9s elapsed)
+  MC run 9/30 done (563.5s elapsed)
+  MC run 10/30 done (626.4s elapsed)
+  MC run 11/30 done (687.7s elapsed)
+  MC run 12/30 done (749.0s elapsed)
+  MC run 13/30 done (810.2s elapsed)
+  MC run 14/30 done (869.9s elapsed)
+  MC run 15/30 done (930.0s elapsed)
+  MC run 16/30 done (993.7s elapsed)
+  MC run 17/30 done (1056.2s elapsed)
+  MC run 18/30 done (1118.3s elapsed)
+  MC run 19/30 done (1181.4s elapsed)
+  MC run 20/30 done (1243.8s elapsed)
+  MC run 21/30 done (1307.4s elapsed)
+  MC run 22/30 done (1372.0s elapsed)
+  MC run 23/30 done (1435.5s elapsed)
+  MC run 24/30 done (1492.2s elapsed)
+  MC run 25/30 done (1553.3s elapsed)
+  MC run 26/30 done (1615.9s elapsed)
+  MC run 27/30 done (1678.6s elapsed)
+  MC run 28/30 done (1739.5s elapsed)
+  MC run 29/30 done (1802.0s elapsed)
+  MC run 30/30 done (1858.7s elapsed)
+
+=== RESULTS (macro-F1, mean +/- std over 30 runs) ===
+            config  F1@100_mean  F1@100_std  F1@1000_mean  F1@1000_std  F1@5000_mean  F1@5000_std  F1@10000_mean  F1@10000_std  F1@20000_mean  F1@20000_std
+         1_base_tl     0.641922    0.224016      0.501097     0.020116      0.500512     0.008806       0.499576      0.005675       0.498979      0.003173
+          3_tl_aqt     0.630727    0.222686      0.502566     0.019279      0.516868     0.013273       0.517861      0.009749       0.517627      0.007108
+     4_tl_unfreeze     0.630727    0.222686      0.497385     0.000730      0.497378     0.000323       0.497417      0.000184       0.497487      0.000000
+5a_full_atl_oracle     0.630727    0.222686      0.497360     0.000756      0.498258     0.004631       0.497659      0.003100       0.497022      0.001982
+5b_full_atl_pseudo     0.630727    0.222686      0.498867     0.008677      0.511609     0.011910       0.513356      0.009090       0.514202      0.005910
+
+Saved: verified_ablation_results.csv, verified_ablation_raw.json

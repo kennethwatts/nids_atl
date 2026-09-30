@@ -1,0 +1,16 @@
+Loading data...
+  [dedup] 2017: 100000 -> 29941 rows (29.9% kept)
+  [dedup] 2018: 100000 -> 15081 rows (15.1% kept)
+Pretraining source model...
+  [pretrain] final epoch loss: 0.0284
+  MC diag run 1/10 done
+  MC diag run 2/10 done
+  MC diag run 3/10 done
+  MC diag run 4/10 done
+  MC diag run 5/10 done
+  MC diag run 6/10 done
+  MC diag run 7/10 done
+  MC diag run 8/10 done
+  MC diag run 9/10 done
+  MC diag run 10/10 done
+Saved oracle_diagnostic.json

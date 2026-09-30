@@ -1,0 +1,29 @@
+Loading real pipeline data (10-feature robust_2017/2018_final.csv)...
+  input_dim = 10, features = ['Bwd_Pkt_Len_Std', 'Pkt_Len_Var', 'Pkt_Size_Avg', 'Pkt_Len_Std', 'Bwd_Seg_Size_Avg', 'Bwd_Pkt_Len_Mean', 'Subflow_Bwd_Byts', 'Pkt_Len_Mean', 'Tot_Len_Fwd_Pkts', 'Subflow_Fwd_Bytes']
+  source (2017): 100000 rows, 19.8% attack
+  target (2018): 100000 rows, 16.8% attack
+  simulating cold-start stream at 1.0% malicious rate
+  AQT: W=500, q=0.99  |  Monte Carlo runs: 10
+
+Pretraining source-domain model on 2017 data...
+  [pretrain] final epoch loss: 0.0966
+  MC run 1/10 done (11.1s elapsed)
+  MC run 2/10 done (23.5s elapsed)
+  MC run 3/10 done (35.0s elapsed)
+  MC run 4/10 done (46.7s elapsed)
+  MC run 5/10 done (58.6s elapsed)
+  MC run 6/10 done (70.7s elapsed)
+  MC run 7/10 done (82.3s elapsed)
+  MC run 8/10 done (93.8s elapsed)
+  MC run 9/10 done (105.7s elapsed)
+  MC run 10/10 done (117.7s elapsed)
+
+=== RESULTS (macro-F1, mean +/- std over 10 runs) ===
+            config  F1@100_mean  F1@100_std  F1@1000_mean  F1@1000_std  F1@5000_mean  F1@5000_std
+         1_base_tl     0.646459    0.231452      0.497562     0.000758      0.497462 4.072532e-05
+          3_tl_aqt     0.646459    0.231452      0.497537     0.000756      0.497235 1.035912e-04
+     4_tl_unfreeze     0.646459    0.231452      0.497562     0.000758      0.497487 5.551115e-17
+5a_full_atl_oracle     0.646459    0.231452      0.497537     0.000756      0.528628 2.037140e-02
+5b_full_atl_pseudo     0.646459    0.231452      0.497537     0.000756      0.497129 1.638029e-04
+
+Saved: verified_ablation_results.csv, verified_ablation_raw.json
