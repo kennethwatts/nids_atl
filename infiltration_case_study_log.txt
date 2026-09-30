@@ -1,0 +1,46 @@
+Loading source (2017, deduped) + infiltration-only target (Wed 28/02 + Thu 01/03, deduped)...
+  input_dim = 10
+  source (2017): 29941 rows, 18.3% attack
+  target (infiltration-only, deduped): 75241 rows, 19.7% infiltration
+  cold-start window: 7200 samples @ 1.0% malicious, 30 MC runs
+
+Pretraining source-domain model on 2017 data (identical to verified_pipeline.py)...
+  [pretrain] final epoch loss: 0.0284
+  MC run 1/30 done (12.3s elapsed)
+  MC run 2/30 done (24.5s elapsed)
+  MC run 3/30 done (36.4s elapsed)
+  MC run 4/30 done (48.6s elapsed)
+  MC run 5/30 done (60.5s elapsed)
+  MC run 6/30 done (72.4s elapsed)
+  MC run 7/30 done (84.2s elapsed)
+  MC run 8/30 done (96.4s elapsed)
+  MC run 9/30 done (108.5s elapsed)
+  MC run 10/30 done (120.3s elapsed)
+  MC run 11/30 done (132.0s elapsed)
+  MC run 12/30 done (143.7s elapsed)
+  MC run 13/30 done (155.7s elapsed)
+  MC run 14/30 done (168.3s elapsed)
+  MC run 15/30 done (180.3s elapsed)
+  MC run 16/30 done (192.7s elapsed)
+  MC run 17/30 done (204.8s elapsed)
+  MC run 18/30 done (217.3s elapsed)
+  MC run 19/30 done (229.6s elapsed)
+  MC run 20/30 done (242.0s elapsed)
+  MC run 21/30 done (254.2s elapsed)
+  MC run 22/30 done (266.0s elapsed)
+  MC run 23/30 done (278.2s elapsed)
+  MC run 24/30 done (290.7s elapsed)
+  MC run 25/30 done (303.4s elapsed)
+  MC run 26/30 done (315.5s elapsed)
+  MC run 27/30 done (327.4s elapsed)
+  MC run 28/30 done (339.6s elapsed)
+  MC run 29/30 done (351.5s elapsed)
+  MC run 30/30 done (363.4s elapsed)
+
+=== INFILTRATION CASE STUDY RESULTS (macro-F1, mean +/- std, 30 runs, n=7200 window) ===
+  1_base_tl                 F1 = 0.039 +/- 0.002
+  3_tl_aqt                  F1 = 0.498 +/- 0.002
+  5a_full_atl_oracle        F1 = 0.498 +/- 0.002
+  5b_full_atl_pseudo        F1 = 0.498 +/- 0.002
+
+Saved: infiltration_case_study_raw.json, infiltration_case_study_results.json
