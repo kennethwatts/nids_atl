@@ -22,7 +22,7 @@ SERIES = [
     # Drawn last, on top, with large hollow markers and a sparse dotted line so it
     # is visible where it sits exactly on top of the original oracle (see caption).
     ("5a_oracle_classweighted", "Oracle, 99:1 class-weighted (identical to original, see note)", "#CC79A7", (0, (1, 4)), "s", 8, 5),
-    ("5b_full_atl_pseudo", "Pseudo-label (proposed)", "#009E73", "-", "o", 4, 2),
+    ("5b_full_atl_pseudo", "Pseudo-label", "#009E73", "-", "o", 4, 2),
 ]
 
 fig, ax = plt.subplots(figsize=(9, 6))
@@ -37,7 +37,7 @@ for cfg_id, label, color, style, marker, msize, z in SERIES:
     ax.fill_between(checkpoints, means - stds, means + stds, color=color, alpha=0.08, zorder=1)
 
 ax.annotate(
-    "Orange & magenta overlap exactly\n(bit-identical results, 30/30 runs)\n— see Finding 1",
+    "Orange (solid) & magenta overlap exactly:\nclass-weighting is bit-identical to\nthe original oracle run, 30/30 seeds",
     xy=(5000, np.mean(combined["5a_full_atl_oracle"]["5000"])),
     xytext=(6200, 0.5245),
     fontsize=8.5, color="#8a3d00", ha="left",
@@ -50,7 +50,7 @@ ax.set_xlim(900, 22000)
 ax.set_ylim(0.48, 0.535)
 ax.set_xlabel("Cold-start stream position (n samples)")
 ax.set_ylabel("Macro-F1 (mean ± std, 30 Monte Carlo runs)")
-ax.set_title("Is oracle a fair baseline? Robustness to learning rate and class weighting", fontsize=12, fontweight="bold")
+ax.set_title("Oracle fine-tuning: sensitivity to learning rate and class weighting", fontsize=12, fontweight="bold")
 ax.legend(fontsize=8.5, loc="lower left", framealpha=0.95)
 ax.grid(alpha=0.25)
 ax.set_xticks(checkpoints)
