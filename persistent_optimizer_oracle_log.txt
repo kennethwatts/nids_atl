@@ -1,0 +1,6 @@
+Loading data, pretraining source model (identical to verified_pipeline.py)...
+  [dedup] 2017: 100000 -> 29941 rows (29.9% kept)
+  [dedup] 2018: 100000 -> 15081 rows (15.1% kept)
+  [pretrain] final epoch loss: 0.0284
+  MC run 1/30 done (159.4s elapsed)
+  MC run 2/30 done (321.3s elapsed)
