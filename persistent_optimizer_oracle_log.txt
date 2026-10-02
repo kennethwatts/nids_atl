@@ -4,3 +4,5 @@ Loading data, pretraining source model (identical to verified_pipeline.py)...
   [pretrain] final epoch loss: 0.0284
   MC run 1/30 done (159.4s elapsed)
   MC run 2/30 done (321.3s elapsed)
+  MC run 3/30 done (485.0s elapsed)
+  MC run 4/30 done (636.6s elapsed)

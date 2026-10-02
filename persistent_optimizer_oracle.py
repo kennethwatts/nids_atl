@@ -108,36 +108,32 @@ def run_persistent_oracle_trial(pretrained_state, input_dim, X_stream, y_stream,
     return preds_all, y_true
 
 
-def main():
-    print("Loading data, pretraining source model (identical to verified_pipeline.py)...")
-    X17, y17, X18, y18, feature_cols = load_data()
-    input_dim = X17.shape[1]
-    model = pretrain_source_model(X17, y17, input_dim)
-    pretrained_state = model.state_dict()
-    source_pred_buffer = build_source_pred_buffer(model, X17)
+CHECKPOINT_PATH = "persistent_optimizer_oracle_checkpoint.json"
 
-    max_n = max(SAMPLE_CHECKPOINTS)
-    results = {
-        f"{opt_name}_lr{lr:g}": {n: [] for n in SAMPLE_CHECKPOINTS}
-        for opt_name in OPTIMIZERS for lr in LR_GRID
-    }
 
-    t0 = time.time()
-    for mc in range(N_MONTE_CARLO):
-        rng = np.random.RandomState(SEED + mc)
-        X_stream, y_stream = make_cold_start_stream(X18, y18, max_n, 0.01, rng)
-        for opt_name, opt_cls in OPTIMIZERS.items():
-            for lr in LR_GRID:
-                key = f"{opt_name}_lr{lr:g}"
-                preds_all, y_true = run_persistent_oracle_trial(
-                    pretrained_state, input_dim, X_stream, y_stream,
-                    source_pred_buffer, max_n, opt_name, opt_cls, lr
-                )
-                for n in SAMPLE_CHECKPOINTS:
-                    f1 = f1_score(y_true[:n], preds_all[:n], average="macro", zero_division=0)
-                    results[key][n].append(f1)
-        print(f"  MC run {mc+1}/{N_MONTE_CARLO} done ({time.time()-t0:.1f}s elapsed)", flush=True)
+def load_checkpoint():
+    try:
+        with open(CHECKPOINT_PATH) as f:
+            ck = json.load(f)
+        # JSON keys come back as strings; convert checkpoint sample-size keys back to int
+        results = {
+            key: {int(n): vals for n, vals in by_n.items()}
+            for key, by_n in ck["results"].items()
+        }
+        return ck["completed_mc_runs"], results
+    except FileNotFoundError:
+        return 0, {
+            f"{opt_name}_lr{lr:g}": {n: [] for n in SAMPLE_CHECKPOINTS}
+            for opt_name in OPTIMIZERS for lr in LR_GRID
+        }
 
+
+def save_checkpoint(completed_mc_runs, results):
+    with open(CHECKPOINT_PATH, "w") as f:
+        json.dump({"completed_mc_runs": completed_mc_runs, "results": results}, f)
+
+
+def write_final_outputs(results):
     rows = []
     for key, by_n in results.items():
         row = {"variant": key}
@@ -150,11 +146,68 @@ def main():
     df.to_csv("persistent_optimizer_oracle_results.csv", index=False)
     with open("persistent_optimizer_oracle_raw.json", "w") as f:
         json.dump(results, f, indent=2)
+    return df
 
-    print("\n=== PERSISTENT-OPTIMIZER ORACLE RESULTS (macro-F1, mean +/- std, 30 MC runs) ===")
+
+def main(time_budget_seconds=None):
+    """
+    Resumable: progress checkpoints to disk after every completed Monte Carlo
+    run (persistent_optimizer_oracle_checkpoint.json), so a kill/restart of
+    this process (e.g. a background job not surviving between tool-call
+    boundaries) loses at most one partially-finished MC run, not the whole
+    experiment. Re-running this script picks up where it left off.
+
+    time_budget_seconds: if set, stop (and checkpoint) after roughly this
+    much wall-clock time rather than running to completion, so this can be
+    invoked repeatedly in bounded chunks.
+    """
+    completed_mc_runs, results = load_checkpoint()
+    if completed_mc_runs >= N_MONTE_CARLO:
+        print(f"Already complete: {completed_mc_runs}/{N_MONTE_CARLO} MC runs in checkpoint.")
+        write_final_outputs(results)
+        return
+
+    print(f"Resuming from checkpoint: {completed_mc_runs}/{N_MONTE_CARLO} MC runs already done."
+          if completed_mc_runs else "Starting fresh (no checkpoint found).")
+    print("Loading data, pretraining source model (identical to verified_pipeline.py)...")
+    X17, y17, X18, y18, feature_cols = load_data()
+    input_dim = X17.shape[1]
+    model = pretrain_source_model(X17, y17, input_dim)
+    pretrained_state = model.state_dict()
+    source_pred_buffer = build_source_pred_buffer(model, X17)
+
+    max_n = max(SAMPLE_CHECKPOINTS)
+    t0 = time.time()
+    mc = completed_mc_runs
+    while mc < N_MONTE_CARLO:
+        rng = np.random.RandomState(SEED + mc)
+        X_stream, y_stream = make_cold_start_stream(X18, y18, max_n, 0.01, rng)
+        for opt_name, opt_cls in OPTIMIZERS.items():
+            for lr in LR_GRID:
+                key = f"{opt_name}_lr{lr:g}"
+                preds_all, y_true = run_persistent_oracle_trial(
+                    pretrained_state, input_dim, X_stream, y_stream,
+                    source_pred_buffer, max_n, opt_name, opt_cls, lr
+                )
+                for n in SAMPLE_CHECKPOINTS:
+                    f1 = f1_score(y_true[:n], preds_all[:n], average="macro", zero_division=0)
+                    results[key][n].append(f1)
+        mc += 1
+        save_checkpoint(mc, results)
+        elapsed = time.time() - t0
+        print(f"  MC run {mc}/{N_MONTE_CARLO} done ({elapsed:.1f}s elapsed this invocation)", flush=True)
+        if time_budget_seconds is not None and elapsed >= time_budget_seconds:
+            print(f"Time budget ({time_budget_seconds}s) reached; checkpointed at "
+                  f"{mc}/{N_MONTE_CARLO} MC runs. Re-run this script to continue.")
+            return
+
+    df = write_final_outputs(results)
+    print(f"\n=== PERSISTENT-OPTIMIZER ORACLE RESULTS (macro-F1, mean +/- std, {N_MONTE_CARLO} MC runs) ===")
     print(df.to_string(index=False))
     print("\nSaved: persistent_optimizer_oracle_results.csv, persistent_optimizer_oracle_raw.json")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    budget = float(sys.argv[1]) if len(sys.argv) > 1 else None
+    main(time_budget_seconds=budget)
