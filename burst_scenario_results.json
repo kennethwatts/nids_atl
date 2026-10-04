@@ -1,0 +1,12 @@
+{
+  "pre_burst_recall_mean": 0.05142563324761466,
+  "pre_burst_recall_std": 0.03949935216164598,
+  "burst_recall_mean": 0.03241666666666667,
+  "burst_recall_std": 0.007541091138260798,
+  "pre_burst_alert_rate_mean": 0.010100000000000001,
+  "burst_alert_rate_mean": 0.010750000000000003,
+  "pre_burst_f1_mean": 0.5208188449932298,
+  "pre_burst_f1_std": 0.02003000288279085,
+  "burst_f1_mean": 0.4754687897155201,
+  "burst_f1_std": 0.0076597523636422
+}
