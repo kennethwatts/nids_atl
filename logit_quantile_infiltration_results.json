@@ -1,0 +1,32 @@
+{
+  "1_base_tl": {
+    "f1_mean": 0.039080387826661886,
+    "f1_std": 0.0018301850103315356,
+    "alert_rate_mean": 0.970013888888889,
+    "alert_rate_std": 0.001910870866682468
+  },
+  "3_tl_aqt_logit": {
+    "f1_mean": 0.49872207101165117,
+    "f1_std": 0.00505558841131538,
+    "alert_rate_mean": 0.012949074074074075,
+    "alert_rate_std": 0.0006628782534335934
+  },
+  "5a_full_atl_oracle_logit": {
+    "f1_mean": 0.49872535672019097,
+    "f1_std": 0.005053950866872991,
+    "alert_rate_mean": 0.012939814814814815,
+    "alert_rate_std": 0.0006425852545210214
+  },
+  "5b_full_atl_pseudo_logit": {
+    "f1_mean": 0.49873021790550837,
+    "f1_std": 0.005058686048966919,
+    "alert_rate_mean": 0.012930555555555556,
+    "alert_rate_std": 0.0006498159758494212
+  },
+  "_diagnostics": {
+    "source_logit_buffer_q99": 10.143013286590572,
+    "oracle_vs_aqt_identical_runs": 24,
+    "pseudo_vs_aqt_identical_runs": 24,
+    "n_mc_runs": 30
+  }
+}
