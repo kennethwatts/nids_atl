@@ -1,0 +1,11 @@
+order,rule,recall,precision,attack_f1,alert_rate
+shuffled,aqt,0.582,0.586,0.584,0.01
+shuffled,aqt_cap,0.582,0.586,0.584,0.01
+shuffled,budget_1pct,0.622,0.631,0.626,0.01
+shuffled,frozen_static,0.0,0.0,0.0,0.0
+shuffled,src_q99,0.0,0.0,0.0,0.0
+time_ordered,aqt,0.026,0.098,0.041,0.003
+time_ordered,aqt_cap,0.026,0.098,0.041,0.003
+time_ordered,budget_1pct,0.021,0.118,0.032,0.004
+time_ordered,frozen_static,0.0,0.0,0.0,0.0
+time_ordered,src_q99,0.0,0.0,0.0,0.0
