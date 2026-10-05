@@ -9,7 +9,9 @@ variant differs only by keyword arguments:
   space      'prob' (sigmoid output, as in the paper) or 'logit' (pre-sigmoid)
   aqt        use a sliding-buffer quantile threshold (else a static threshold)
   preseed    list of source-domain scores in the SAME space (None/[] = no pre-seed)
-  adapt      'none' | 'oracle' | 'pseudo' | 'pseudo_neg' | 'pseudo_pos'
+  adapt      'none' | 'oracle' | 'oracle_gated' | 'pseudo' | 'pseudo_neg' | 'pseudo_pos'
+             (oracle_gated = true labels, but only on the samples the pseudo-label
+             gate would select; separates WHICH samples from WHICH labels)
   opt        'reset_adam' (verified_pipeline's per-step re-created Adam),
              'persist_adam', 'persist_sgd'  (constructed once; see
              persistent_optimizer_oracle.py for the group/lr convention)
@@ -113,11 +115,15 @@ def run_flex_trial(state, input_dim, X, y, n, *, space="logit", aqt=True, presee
                 if len(buffer) >= window:
                     recent = buffer[-window:]
                     hi, lo = np.quantile(recent, PSEUDO_HI_QUANTILE), np.quantile(recent, PSEUDO_LO_QUANTILE)
-                    if s_t > hi and adapt in ("pseudo", "pseudo_pos"):
+                    if adapt == "oracle_gated":
+                        # TRUE label, but only on the samples the pseudo-label gate selects
+                        if s_t > hi or s_t < lo:
+                            label = y_t
+                    elif s_t > hi and adapt in ("pseudo", "pseudo_pos"):
                         label = 1.0
                     elif s_t < lo and adapt in ("pseudo", "pseudo_neg"):
                         label = 0.0
-                if label is not None:
+                if label is not None and adapt != "oracle_gated":
                     key = "pos" if label == 1.0 else "neg"
                     lab_stats[key] += 1
                     lab_stats[key + "_correct"] += int(label == y_t)
