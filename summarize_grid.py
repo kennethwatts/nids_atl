@@ -25,10 +25,14 @@ def to_frame(name, nshards, n="20000", metric="macro_f1"):
     return pd.DataFrame(rows)
 
 
-def cluster_boot(df_wide, fn, reps=2000, seed=0):
+REPS = 2000
+
+
+def cluster_boot(df_wide, fn, reps=None, seed=0):
     """df_wide: rows = (seed, stream) units, columns = variants. fn maps a
     wide frame to a scalar. Resamples seeds with replacement, then streams
     within each chosen seed."""
+    reps = REPS if reps is None else reps
     rng = np.random.RandomState(seed)
     groups = {s: g for s, g in df_wide.groupby("seed")}
     seeds = list(groups)
