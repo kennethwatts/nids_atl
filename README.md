@@ -60,6 +60,10 @@ Monte Carlo run (or every paired stream) and resume when re-invoked.
 | `round6_frozen.py` (`decoy`, `mitig`, `bbse`), `summarize_round6.py` | Random/surrogate/victim-aware decoys (Table IV), clean-window mitigations, BBSE, prevalence-matched q |
 | `multiseed_persistent.py`, `summarize_multiseed.py` | 20-seed grid with persistent optimizers, t-intervals across seeds (Table II) |
 | `time_ordered_finetune.py`, `summarize_tof.py` | Fine-tuned variants under time-ordered replay |
+| `extract_sample.py` | Order-preserving 1-in-k sampler for the large 2018 Tuesday file |
+| `multiday_pool.py`, `multiday_sanity.py` | Multi-day pool (2017 Mon/Tue/Wed/Fri-DDoS/Fri-PortScan -> 2018 Wed 14, Tue 20, Wed 21 Feb), per-family frozen AUROC |
+| `multiday_grid.py`, `summarize_multiday.py` | 20-seed headline and persistent-optimizer grid on the multi-day pool, 77 and 10 features (Table III) |
+| `multiday_replay.py`, `summarize_multiday_replay.py` | Time-ordered replay of each multi-day 2018 day (Section V-B) |
 
 `all_features_rerun.py` (commit `2c985b5`) ran AQT on sigmoid outputs, 93.5%
 of which were exactly 0.0 for its pretraining seed; its AUROC and its
