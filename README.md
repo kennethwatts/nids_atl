@@ -64,6 +64,10 @@ Monte Carlo run (or every paired stream) and resume when re-invoked.
 | `multiday_pool.py`, `multiday_sanity.py` | Multi-day pool (2017 Mon/Tue/Wed/Fri-DDoS/Fri-PortScan -> 2018 Wed 14, Tue 20, Wed 21 Feb), per-family frozen AUROC |
 | `multiday_grid.py`, `summarize_multiday.py` | 20-seed headline and persistent-optimizer grid on the multi-day pool, 77 and 10 features (Table III) |
 | `multiday_replay.py`, `summarize_multiday_replay.py` | Time-ordered replay of each multi-day 2018 day (Section V-B) |
+| `round7_grid.py` (`cells`, `tune`, `labels`, `gate`), `flex_trial.py` (`label_frac`, `oracle_alert`), `summarize_round7.py`, `summarize_tuned.py`, `summarize_gate.py`, `summarize_table1.py` | Round 7: 20-seed cells for all four pools (budget, persistent pseudo-labels, Bonferroni flags), held-out rate tuning (seeds 3000-3005), label-budget curve, 20-seed gate check, seed-averaged Table I |
+| `round7_frozen.py` (`cleanwin`, `dose`), `round7_tpr1.py`, `summarize_cleanwin.py`, `summarize_dose.py` | Round 7: clean-window threshold with 0/1/5% contamination, TPR at 1% FPR, ranking-noise dose-response |
+| `round7_replay_ft.py`, `summarize_replayft.py` | Round 7: time-ordered replay of fine-tuned variants |
+| `make_fig_r7.py`, `run_r7_queue*.sh` | Figure 1 of the paper and the experiment queue used for Round 7 |
 
 `all_features_rerun.py` (commit `2c985b5`) ran AQT on sigmoid outputs, 93.5%
 of which were exactly 0.0 for its pretraining seed; its AUROC and its

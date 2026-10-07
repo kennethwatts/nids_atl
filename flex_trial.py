@@ -59,7 +59,8 @@ def score_buffer(model, X, space, window=AQT_WINDOW, seed=42):
 
 def run_flex_trial(state, input_dim, X, y, n, *, space="logit", aqt=True, preseed=None,
                    adapt="none", opt="reset_adam", lr_mult=1.0, q=AQT_Q, window=AQT_WINDOW,
-                   static_tau=None, floor_tau=None, cap_tau=None, trace_every=0):
+                   static_tau=None, floor_tau=None, cap_tau=None, trace_every=0,
+                   label_frac=None, label_seed=0):
     model = CompactMLP(input_dim=input_dim)
     model.load_state_dict(state)
     lr = BASE_LR * lr_mult
@@ -84,6 +85,7 @@ def run_flex_trial(state, input_dim, X, y, n, *, space="logit", aqt=True, presee
     n_updates = 0
     lab_stats = {"pos": 0, "pos_correct": 0, "neg": 0, "neg_correct": 0}
     trace = []
+    lab_rng = np.random.RandomState(label_seed)  # Round 7: label-budget policies
 
     for t in range(1, n + 1):
         x_t = torch.tensor(X[t - 1:t], dtype=torch.float32)
@@ -111,6 +113,10 @@ def run_flex_trial(state, input_dim, X, y, n, *, space="logit", aqt=True, presee
             label = None
             if adapt == "oracle":
                 label = y_t
+                if label_frac is not None and lab_rng.rand() >= label_frac:
+                    label = None  # label only a random fraction of flows
+            elif adapt == "oracle_alert":
+                label = y_t if preds[t - 1] == 1 else None  # analyst triage: label alerted flows only
             else:
                 if len(buffer) >= window:
                     recent = buffer[-window:]
