@@ -42,6 +42,10 @@ def load_pool(name):
         from raw_pool import get_pool
         p = get_pool(name[3:])
         return p["X17"], p["y17"], p["X18"], p["y18"]
+    if name in ("multi77", "multi10"):
+        from multiday_pool import get_pool
+        p = get_pool(name[5:])
+        return p["X17"], p["y17"], p["X18"], p["y18"]
     raise ValueError(name)
 
 
