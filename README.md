@@ -56,6 +56,10 @@ Monte Carlo run (or every paired stream) and resume when re-invoked.
 | `threshold_baselines.py` | Source-calibrated static threshold, mismatched-prevalence budgets, hybrid cap, window length, attack-class metrics |
 | `adversarial_preseeded.py` | Decoy inflation and slow-drift poisoning against the pre-seeded default |
 | `time_ordered_replay.py` | Time-ordered replay of the raw 2018 day file |
+| `summarize_decoy.py`, `summarize_baselines.py`, `summarize_replay.py` | Summaries for the decoy, baseline and replay tables |
+| `round6_frozen.py` (`decoy`, `mitig`, `bbse`), `summarize_round6.py` | Random/surrogate/victim-aware decoys (Table IV), clean-window mitigations, BBSE, prevalence-matched q |
+| `multiseed_persistent.py`, `summarize_multiseed.py` | 20-seed grid with persistent optimizers, t-intervals across seeds (Table II) |
+| `time_ordered_finetune.py`, `summarize_tof.py` | Fine-tuned variants under time-ordered replay |
 
 `all_features_rerun.py` (commit `2c985b5`) ran AQT on sigmoid outputs, 93.5%
 of which were exactly 0.0 for its pretraining seed; its AUROC and its
