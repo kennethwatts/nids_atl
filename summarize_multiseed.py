@@ -8,9 +8,10 @@ from scipy import stats
 from summarize_grid import to_frame
 
 pool = sys.argv[1]
-df = to_frame(f"multiseed_{pool}", 2, "20000", "macro_f1")
+metric = sys.argv[2] if len(sys.argv) > 2 else "macro_f1"
+df = to_frame(f"multiseed_{pool}", 2, "20000", metric)
 w = df.pivot_table(index=["seed", "stream"], columns="variant", values="value").reset_index()
-per_seed = w.groupby("seed").mean(numeric_only=True)
+per_seed = w.drop(columns="stream").groupby("seed").mean(numeric_only=True)
 n = len(per_seed)
 
 def tci(x):
@@ -33,6 +34,6 @@ for a, b in ref:
         rows.append(dict(kind="diff", a=a, b=b, mean=m, lo=lo, hi=hi, seed_min=d.min(), seed_max=d.max(),
                          seeds_positive=int((d > 0).sum())))
 out = pd.DataFrame(rows); out["n_seeds"] = n
-out.to_csv(f"multiseed_{pool}_summary.csv", index=False)
+out.to_csv(f"multiseed_{pool}_summary.csv" if metric == "macro_f1" else f"multiseed_{pool}_{metric}_summary.csv", index=False)
 pd.set_option("display.width", 220)
 print(out.round(4).to_string())
