@@ -73,6 +73,7 @@ Monte Carlo run (or every paired stream) and resume when re-invoked.
 | `round8_frozen.py`, `round7_frozen.py dose` | Round 8: R-precision next to TPR@1%FPR per pool and per multi-day day; dose-response with R-precision |
 | `round8_robust.py`, `round8_surrogate.py`, `round8_replay_thr.py`, `summarize_replaythr.py`, `run_r8_frozen.sh`, `run_r8_replay.sh` | Round 8: robust clean-window quantiles and window drift, surrogate strength (disjoint data), fine-tuned replay under AQT/budget/clean-window rules |
 | `round7_grid.py` modes `r9`, `r9tune`, `summarize_r9.py`, `run_r9.sh`, `run_r9_nf.sh` | Round 9: pseudo-label rate 300x (grid edge) on NF and multi-10, NF label-budget curve at 3x/10x |
+| `round9_extras.py`, `summarize_r9b.py`, `run_r9b.sh` | Round 11: prevalence sweep at 20 seeds (Wed pair) and decoy-recovery test |
 | `R9=1 round8_robust.py`, `summarize_r9_robust.py` | Round 9: clean-window sweep to 20% contamination, contamination check and q' on held-out Tue 20 Feb (`round9_robust_summary.csv`) |
 
 `all_features_rerun.py` (commit `2c985b5`) ran AQT on sigmoid outputs, 93.5%
