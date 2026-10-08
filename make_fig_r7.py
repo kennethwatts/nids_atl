@@ -38,7 +38,7 @@ for att, c in (("random", C["gray"]), ("surrogate", C["orange"]), ("victim", C["
     ax[2].plot(xs, ys, "o-", ms=2.5, lw=1, color=c, label={"random": "random", "surrogate": "surrogate", "victim": "victim-aware"}[att])
 S = json.load(open("round8_surrogate.json"))
 xs3 = [0, 1, 5]; ys3 = [np.mean([r["recall"] for r in S[f"disjoint_B|{x/100}"]]) for x in xs3]
-ax[2].plot(xs3, ys3, "s--", ms=3, lw=1, color=C["green"], label="disjoint-data surrogate")
+ax[2].plot(xs3, ys3, "s--", ms=3, lw=1, color=C["green"], label="disjoint-half surrogate")
 ax[2].set_xlabel("decoy rate (% of traffic)"); ax[2].set_ylabel("recall on real attacks"); ax[2].set_title("(c) Decoy inflation"); ax[2].set_ylim(0, 0.65)
 ax[2].legend(frameon=False, loc="lower left", handletextpad=0.3, borderpad=0.1)
 
