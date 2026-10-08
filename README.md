@@ -68,6 +68,10 @@ Monte Carlo run (or every paired stream) and resume when re-invoked.
 | `round7_frozen.py` (`cleanwin`, `dose`), `round7_tpr1.py`, `summarize_cleanwin.py`, `summarize_dose.py` | Round 7: clean-window threshold with 0/1/5% contamination, TPR at 1% FPR, ranking-noise dose-response |
 | `round7_replay_ft.py`, `summarize_replayft.py` | Round 7: time-ordered replay of fine-tuned variants |
 | `make_fig_r7.py`, `run_r7_queue*.sh` | Figure 1 of the paper and the experiment queue used for Round 7 |
+| `nf_pool.py`, `run_r8_nf.sh`, `run_r8_nf2.sh` | Round 8: second dataset family (NF-UNSW-NB15-v2 source, NF-CSE-CIC-IDS2018-v2 target sample made with `extract_sample.py`); `NF_SRC`/`NF_TGT` env vars point at the files |
+| `round7_grid.py` modes `r8`, `r8tune`, `flex_trial.py` (`oracle_benign`), `run_r8_queue.sh` | Round 8: reset Adam at 3x/10x, persistent-vs-reset at matched rates, pseudo-label rate grid and held-out tuning, benign-only labels |
+| `round8_frozen.py`, `round7_frozen.py dose` | Round 8: R-precision next to TPR@1%FPR per pool and per multi-day day; dose-response with R-precision |
+| `round8_robust.py`, `round8_surrogate.py`, `round8_replay_thr.py`, `summarize_replaythr.py`, `run_r8_frozen.sh`, `run_r8_replay.sh` | Round 8: robust clean-window quantiles and window drift, surrogate strength (disjoint data), fine-tuned replay under AQT/budget/clean-window rules |
 
 `all_features_rerun.py` (commit `2c985b5`) ran AQT on sigmoid outputs, 93.5%
 of which were exactly 0.0 for its pretraining seed; its AUROC and its
