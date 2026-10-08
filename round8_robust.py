@@ -15,7 +15,9 @@ from threshold_baselines import scores_of
 from round7_frozen import days_of, SEEDS
 from round6_frozen import stats
 torch.set_num_threads(1)
-KS = [500, 1000, 2000, 5000]; CS = [0.0, 0.01, 0.05]
+import os
+R9 = os.environ.get('R9') == '1'
+KS = [500, 1000, 2000, 5000]; CS = [0.0, 0.01, 0.05, 0.10, 0.20] if R9 else [0.0, 0.01, 0.05]
 
 def est(win, gap_src):
     q = lambda p: float(np.quantile(win, p))
@@ -52,4 +54,4 @@ for seed in SEEDS:
                      for j in range(0, nb - mm)]
             drift.setdefault(d, {}).setdefault(str(mm), {})[str(seed)] = [float(np.mean(rates)), float(np.median(rates)), len(rates)]
     print(f"  robust {pool} seed {seed} done", flush=True)
-json.dump(dict(robust=out, drift=drift), open(f"round8_robust_{pool}_raw.json", "w"))
+json.dump(dict(robust=out, drift=drift), open(f"round{9 if R9 else 8}_robust_{pool}_raw.json", "w"))

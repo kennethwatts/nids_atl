@@ -72,13 +72,23 @@ def variants_for(mode, pool):
         V["aqt"] = dict(space=sp, aqt=True, adapt="none")
         for m in (1, 3, 10, 30, 100):
             V[f"pseudo_adam_{m}x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="persist_adam", lr_mult=m)
+    elif mode == "r9":  # Round 9: 300x pseudo-label rate (grid edge) and the NF label-budget curve
+        V["aqt"] = dict(space=sp, aqt=True, adapt="none")
+        V["pseudo_adam_300x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="persist_adam", lr_mult=300)
+        if pool == "nf":
+            for m in (3, 10):
+                for f in (0.01, 0.05, 0.1, 0.25, 1.0):
+                    V[f"lab{f}_adam_{m}x"] = dict(space=sp, aqt=True, adapt="oracle", opt="persist_adam", lr_mult=m, label_frac=f)
+    elif mode == "r9tune":
+        V["aqt"] = dict(space=sp, aqt=True, adapt="none")
+        V["pseudo_adam_300x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="persist_adam", lr_mult=300)
     return V
 
 
 def main():
     mode, pool, shard, nshards = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
     budget = float(sys.argv[5]) if len(sys.argv) > 5 else None
-    seeds = TUNE_SEEDS if mode in ("tune", "r8tune") else SEEDS20
+    seeds = TUNE_SEEDS if mode in ("tune", "r8tune", "r9tune") else SEEDS20
     variants = variants_for(mode, pool)
     ck = f"round7_{mode}_{pool}_shard{shard}.json"
     done = json.load(open(ck)) if os.path.exists(ck) else {}
