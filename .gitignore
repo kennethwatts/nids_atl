@@ -2,3 +2,4 @@ __pycache__/
 pool_cache.npz
 *.log
 multiday_cache.npz
+nf_cache.npz

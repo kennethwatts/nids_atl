@@ -46,6 +46,10 @@ def load_pool(name):
         from multiday_pool import get_pool
         p = get_pool(name[5:])
         return p["X17"], p["y17"], p["X18"], p["y18"]
+    if name == "nf":
+        from nf_pool import get_pool
+        p = get_pool()
+        return p["X17"], p["y17"], p["X18"], p["y18"]
     raise ValueError(name)
 
 

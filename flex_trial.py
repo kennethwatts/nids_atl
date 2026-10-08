@@ -115,6 +115,8 @@ def run_flex_trial(state, input_dim, X, y, n, *, space="logit", aqt=True, presee
                 label = y_t
                 if label_frac is not None and lab_rng.rand() >= label_frac:
                     label = None  # label only a random fraction of flows
+            elif adapt == "oracle_benign":
+                label = y_t if y_t == 0 else None  # only trusted-benign labels (no attack labels)
             elif adapt == "oracle_alert":
                 label = y_t if preds[t - 1] == 1 else None  # analyst triage: label alerted flows only
             else:

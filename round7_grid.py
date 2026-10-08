@@ -34,7 +34,7 @@ def variants_for(mode, pool):
         V["base"] = dict(space=sp, aqt=False, adapt="none", preseed="none")
         V["aqt"] = dict(space=sp, aqt=True, adapt="none")
         V["budget_1pct"] = dict(special="budget")
-        if pool == "raw77":
+        if pool in ("raw77", "nf"):
             V["oracle_reset"] = dict(space=sp, aqt=True, adapt="oracle", opt="reset_adam")
             V["pseudo_reset"] = dict(space=sp, aqt=True, adapt="pseudo", opt="reset_adam")
             for m in (1, 3, 10, 30, 100):
@@ -60,13 +60,25 @@ def variants_for(mode, pool):
             for f in (0.001, 0.01, 0.05, 0.1, 0.25, 1.0):
                 V[f"lab{f}_adam_{m}x"] = dict(space=sp, aqt=True, adapt="oracle", opt="persist_adam", lr_mult=m, label_frac=f)
             V[f"alert_adam_{m}x"] = dict(space=sp, aqt=True, adapt="oracle_alert", opt="persist_adam", lr_mult=m)
+    elif mode == "r8":  # Round 8 R2-1/2/6: reset Adam at higher rates, pseudo-label rate grid, benign-only labels
+        V["aqt"] = dict(space=sp, aqt=True, adapt="none")
+        for m in (3, 10):
+            V[f"oracle_reset_{m}x"] = dict(space=sp, aqt=True, adapt="oracle", opt="reset_adam", lr_mult=m)
+            V[f"pseudo_reset_{m}x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="reset_adam", lr_mult=m)
+            V[f"benign_adam_{m}x"] = dict(space=sp, aqt=True, adapt="oracle_benign", opt="persist_adam", lr_mult=m)
+        for m in (1, 3, 10, 30, 100):
+            V[f"pseudo_adam_{m}x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="persist_adam", lr_mult=m)
+    elif mode == "r8tune":  # pseudo-label rate chosen on held-out seeds
+        V["aqt"] = dict(space=sp, aqt=True, adapt="none")
+        for m in (1, 3, 10, 30, 100):
+            V[f"pseudo_adam_{m}x"] = dict(space=sp, aqt=True, adapt="pseudo", opt="persist_adam", lr_mult=m)
     return V
 
 
 def main():
     mode, pool, shard, nshards = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
     budget = float(sys.argv[5]) if len(sys.argv) > 5 else None
-    seeds = TUNE_SEEDS if mode == "tune" else SEEDS20
+    seeds = TUNE_SEEDS if mode in ("tune", "r8tune") else SEEDS20
     variants = variants_for(mode, pool)
     ck = f"round7_{mode}_{pool}_shard{shard}.json"
     done = json.load(open(ck)) if os.path.exists(ck) else {}

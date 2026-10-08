@@ -135,7 +135,8 @@ def dose(pool):
                     # pre-seed with source-benign+attack scores plus the same noise level
                     pre = list((pre0 + np.random.RandomState(seed * 11 + rep).randn(len(pre0)) * sg * sd17))
                     b = s[yy == 0]; thr = np.quantile(b, 0.99)
-                    rk = {"auroc": float(roc_auc_score(yy, s)), "tpr1": float((s[yy == 1] > thr).mean())}
+                    kk = int(round(0.01 * len(s))); rk = {"auroc": float(roc_auc_score(yy, s)), "tpr1": float((s[yy == 1] > thr).mean()),
+                          "rprec": float(yy[np.argsort(-s)[:kk]].sum() / max(yy.sum(), 1))}
                     p_aqt = fast_aqt(s, pre, 500, 0.99, 0.0); p_bud = budget_preds(s, 0.01, 0.0); p_base = (s > 0).astype(np.int8)
                     out.setdefault(f"{d}|{sg}", []).append(dict(seed=seed, **rk,
                         aqt_macro=macro(p_aqt, yy), base_macro=macro(p_base, yy), budget_macro=macro(p_bud, yy),

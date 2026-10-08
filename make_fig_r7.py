@@ -13,10 +13,10 @@ d = pd.read_csv("round7_dose_summary.csv")
 mk = {"tue20_18": ("o", C["orange"], "Tue 20"), "wed14_18": ("s", C["purple"], "Wed 14"), "wed21_18": ("^", C["blue"], "Wed 21 (multi)"), "wed21_raw": ("D", C["green"], "Wed 21 (Wed pair)")}
 for day, g in d.groupby("day"):
     m, c, lab = mk[day]
-    ax[0].plot(g.tpr1, g.aqt_af1, "-", color=c, lw=0.8, alpha=0.5)
-    ax[0].plot(g.tpr1, g.aqt_af1, m, color=c, ms=3, label=lab)
-    g0 = g[g.sigma == 0]; ax[0].plot(g0.tpr1, g0.aqt_af1, m, color=c, ms=6.5, mfc="none", mew=1.0)
-ax[0].set_xlabel("TPR at 1% FPR (frozen)"); ax[0].set_ylabel("AQT attack-F1"); ax[0].set_title("(a) AQT tracks TPR@1%FPR")
+    ax[0].plot(g.rprec, g.aqt_af1, "-", color=c, lw=0.8, alpha=0.5)
+    ax[0].plot(g.rprec, g.aqt_af1, m, color=c, ms=3, label=lab)
+    g0 = g[g.sigma == 0]; ax[0].plot(g0.rprec, g0.aqt_af1, m, color=c, ms=6.5, mfc="none", mew=1.0)
+ax[0].set_xlabel("R-precision (frozen)"); ax[0].set_ylabel("AQT attack-F1"); ax[0].set_title("(a) AQT tracks R-precision")
 ax[0].legend(frameon=False, loc="upper left", handletextpad=0.2, borderpad=0.1)
 
 # (b) label budget
