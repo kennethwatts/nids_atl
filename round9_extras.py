@@ -1,7 +1,7 @@
 """Round 9/10 extras on the Wed pair (raw77, logit space, frozen model).
 usage: python3 round9_extras.py prev <shard> <nshards>   -> round9_prev_shard<k>.json
          AQT attack-F1/recall vs prevalence {0.5,1,2,5,20}% at q=0.99 and prevalence-matched q, 20 seeds x 4 streams
-       python3 round9_extras.py recover                  -> round9_recover.json
+       python3 round9_extras.py recover [nstreams>8 -> 5 seeds x nstreams, round9_recover_big.json]                  -> round9_recover.json
          decoy recovery: surrogate decoys (1% of the stream) only in the first half; recall of AQT / top-1% budget on real
          attacks before the stop and in the segments after it (3 seeds x 8 streams, as in the decoy experiment)"""
 import json, sys, numpy as np, torch
@@ -32,13 +32,14 @@ if mode == "prev":
 else:
     out = {}
     segs = {"during": (0, 10000), "0-1000": (10000, 11000), "1000-2000": (11000, 12000), "2000+": (12000, 20000)}
-    for seed in (42, 123, 456):
+    NS = int(sys.argv[2]) if len(sys.argv) > 2 else 8
+    for seed in ((42, 123, 456, 789, 2024) if NS > 8 else (42, 123, 456)):
         torch.manual_seed(seed); m = pretrain_source_model(X17, y17, dim)
         torch.manual_seed(seed + 1000); sur = pretrain_source_model(X17, y17, dim)
         pre = score_buffer(m, X17, "logit"); s18 = scores_of(m, X18, "logit"); t18 = scores_of(sur, X18, "logit")
         ben = np.where(y18 == 0)[0]; att = np.where(y18 == 1)[0]
         top_s = ben[t18[ben] >= np.quantile(t18[ben], 0.99)]
-        for j in range(8):
+        for j in range(NS):
             for tag, ndec_first in (("decoy", 100), ("none", 0)):
                 rng = np.random.RandomState(seed * 1000 + j)
                 half = N // 2; n_att_h = int(round(half * 0.01))
@@ -54,4 +55,4 @@ else:
                         mk = y[a:b] == 1
                         out.setdefault(f"{seed}_{j}_{tag}_{rule}_{sn}", float(p[a:b][mk].mean()) if mk.any() else None)
         print("  recover seed", seed, "done", flush=True)
-    json.dump(out, open("round9_recover.json", "w"))
+    json.dump(out, open("round9_recover.json" if NS <= 8 else "round9_recover_big.json", "w"))

@@ -34,3 +34,14 @@ for rule in ("aqt","budget"):
         ks=[k for k in a if a[k] is not None and b.get(k) is not None]
         dd=np.array([a[k]-b[k] for k in ks]); h=st.t.ppf(.975,len(dd)-1)*dd.std(ddof=1)/np.sqrt(len(dd))
         print(rule,seg,len(dd),round(dd.mean(),3),round(dd.mean()-h,3),round(dd.mean()+h,3))
+
+# larger recovery run (5 seeds x 16 streams): python3 round9_extras.py recover 16 -> round9_recover_big.json
+import os
+if os.path.exists("round9_recover_big.json"):
+    r=json.load(open("round9_recover_big.json")); print("big recovery run")
+    def g(tag,rule,seg): return {tuple(k.split("_")[:2]):v for k,v in r.items() if k.split("_",4)[2]==tag and k.split("_",4)[3]==rule and k.split("_",4)[4]==seg}
+    for rule in ("aqt","budget"):
+        for seg in ("during","0-1000","1000-2000","2000+"):
+            a=g("decoy",rule,seg); b=g("none",rule,seg); ks=[k for k in a if a[k] is not None and b.get(k) is not None]
+            dd=np.array([a[k]-b[k] for k in ks]); h=st.t.ppf(.975,len(dd)-1)*dd.std(ddof=1)/np.sqrt(len(dd))
+            print(rule,seg,len(dd),round(np.mean([a[k] for k in ks]),3),round(np.mean([b[k] for k in ks]),3),round(dd.mean(),3),round(dd.mean()-h,3),round(dd.mean()+h,3))
