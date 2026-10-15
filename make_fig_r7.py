@@ -28,7 +28,7 @@ for m, c in ((1, C["blue"]), (10, C["orange"])):
     ax[1].fill_between(np.array(fr) * 100, lo, hi, color=c, alpha=0.15, lw=0)
     ya = L[L.a == f"alert_adam_{m}x"]["mean"].iloc[0]; ax[1].plot([100], [ya], "x", color=c, ms=5, mew=1.2)
 ax[1].axhline(L[L.a == "aqt"]["mean"].iloc[0], color=C["gray"], ls="--", lw=0.8); ax[1].text(0.12, L[L.a == "aqt"]["mean"].iloc[0] + 0.008, "AQT", color=C["gray"], fontsize=7)
-ax[1].set_xscale("log"); ax[1].set_xlabel("% of flows labelled"); ax[1].set_ylabel("macro-F1"); ax[1].set_title("(b) Label budget")
+ax[1].set_xscale("log"); ax[1].set_xlabel("% of flows labeled"); ax[1].set_ylabel("macro-F1"); ax[1].set_title("(b) Label budget")
 ax[1].legend(frameon=False, loc="upper left", handletextpad=0.3, borderpad=0.1)
 
 # (c) decoys
