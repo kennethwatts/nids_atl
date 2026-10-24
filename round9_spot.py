@@ -1,6 +1,6 @@
 """Round 9 (mock-review Run B): SPOT (Siffer et al., KDD 2017) against AQT, the cumulative top-1% budget and a clean-500
 static threshold, on frozen-model scores. SPOT: initial threshold t = 98th percentile of 2,000 source scores, generalized
-Pareto fit to excesses, alert threshold z_q for risk q=1e-2; alerts are NOT added to the model, other exceedances of t update it.
+Pareto fit to excesses, alert threshold z_q for risk q=1e-2 (and 1e-3); alerts are NOT added to the model, other exceedances of t update it.
 Streams: (a) Wed pair (raw77) and multi-day (multi77) days, time-ordered and shuffled, attacks thinned to 1%
 (seeds 42,123,456); (b) decoy streams of round8_surrogate.py (raw77; random and disjoint-half surrogate; rates 0,1,5%).
 usage: python3 round9_spot.py -> round9_spot.json"""
@@ -23,11 +23,16 @@ class SPOT:
         self.t = float(np.quantile(init, level)); self.peaks = list(init[init > self.t] - self.t)
         self.n = len(init); self._fit()
     def _fit(self):
-        Y = np.asarray(self.peaks); Nt = len(Y)
+        # generalized Pareto fit to the excesses by probability-weighted moments (Hosking & Wallis 1987); the scipy
+        # MLE was unstable on 40 to 400 peaks (it returned thresholds below t in a sanity check)
+        Y = np.sort(np.asarray(self.peaks)); Nt = len(Y)
         if Nt < 5:
             self.zq = self.t + (Y.mean() if Nt else 0.0) * 3; return
-        g, _, s = genpareto.fit(Y, floc=0.0); r = self.q * self.n / Nt
-        self.zq = self.t + (s / g) * (r ** (-g) - 1) if abs(g) > 1e-6 else self.t - s * np.log(r)
+        p = (np.arange(1, Nt + 1) - 0.35) / Nt; a0 = Y.mean(); a1 = np.mean((1 - p) * Y)
+        k = float(np.clip(a0 / (a0 - 2 * a1) - 2, -0.9, 0.9)); sg = 2 * a0 * a1 / (a0 - 2 * a1)
+        r = self.q * self.n / Nt
+        self.zq = self.t + (sg / k) * (1 - r ** k) if abs(k) > 1e-6 else self.t - sg * np.log(r)
+        self.zq = max(self.zq, self.t)
     def run(self, s):
         p = np.zeros(len(s), np.int8)
         for i, x in enumerate(s):
@@ -40,7 +45,8 @@ class SPOT:
 def rules(s, pre, init, y):
     clean = s[y == 0][:500]
     return {"aqt": aqt_preds(s, pre, 500, 0.99, 0.0), "budget_1pct": budget_preds(s, 0.01, 0.0),
-            "clean500": (s > np.quantile(clean, 0.99)).astype(np.int8), "spot": SPOT(init).run(s)}
+            "clean500": (s > np.quantile(clean, 0.99)).astype(np.int8), "spot": SPOT(init).run(s),
+            "spot_q1e-3": SPOT(init, q=1e-3).run(s)}
 
 out = {"replay": {}, "decoy": {}}
 for pool in ("raw77", "multi77"):
