@@ -1,5 +1,5 @@
 import json, numpy as np, scipy.stats as st, collections
-d = json.load(open("round9_spot.json"))
+import sys; d = json.load(open(sys.argv[1] if len(sys.argv) > 1 else "round9_spot.json"))
 def tci(v):
     v = np.array(v, float); m = v.mean(); n = len(v)
     h = st.t.ppf(.975, n - 1) * v.std(ddof=1) / np.sqrt(n) if n > 1 else float("nan"); return m, m - h, m + h
