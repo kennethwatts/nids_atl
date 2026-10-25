@@ -17,7 +17,7 @@ for day, g in d.groupby("day"):
     ax[0].plot(g.rprec, g.aqt_af1, m, color=c, ms=3, label=lab)
     g0 = g[g.sigma == 0]; ax[0].plot(g0.rprec, g0.aqt_af1, m, color=c, ms=6.5, mfc="none", mew=1.0)
 ax[0].set_xlabel("R-precision (frozen)"); ax[0].set_ylabel("AQT attack-F1"); ax[0].set_title("(a) AQT vs R-precision")
-ax[0].legend(frameon=False, loc="upper left", handletextpad=0.2, borderpad=0.1)
+ax[0].legend(frameon=False, loc="upper left", handletextpad=0.1, borderpad=0.1, fontsize=6, labelspacing=0.2)
 
 # (b) label budget
 L = pd.read_csv("round7_labels_multi77_macro_f1_summary.csv"); L = L[L.kind == "level"]
@@ -28,7 +28,7 @@ for m, c in ((1, C["blue"]), (10, C["orange"])):
     ax[1].fill_between(np.array(fr) * 100, lo, hi, color=c, alpha=0.15, lw=0)
     ya = L[L.a == f"alert_adam_{m}x"]["mean"].iloc[0]; ax[1].plot([100], [ya], "x", color=c, ms=5, mew=1.2)
 ax[1].axhline(L[L.a == "aqt"]["mean"].iloc[0], color=C["gray"], ls="--", lw=0.8); ax[1].text(0.12, L[L.a == "aqt"]["mean"].iloc[0] + 0.008, "AQT", color=C["gray"], fontsize=7)
-ax[1].set_xscale("log"); ax[1].set_xlabel("% of flows labeled"); ax[1].set_ylabel("macro-F1"); ax[1].set_title("(b) Label budget")
+ax[1].set_xscale("log"); ax[1].set_xticks([0.1, 1, 10, 100]); ax[1].set_xticklabels(["0.1%\n(20)", "1%\n(200)", "10%\n(2k)", "100%\n(20k)"]); ax[1].set_xlabel("flows labeled (count of 20,000)"); ax[1].set_ylabel("macro-F1"); ax[1].set_title("(b) Label budget")
 ax[1].legend(frameon=False, loc="upper left", handletextpad=0.3, borderpad=0.1)
 
 # (c) decoys, shaded 95% t-intervals over seeds (per-seed means)
@@ -56,10 +56,10 @@ for x in xs3:
     st3.append(o)
 b3 = {k: np.mean(v) for k, v in st3[0].items()}
 st3 = np.array([_ci([b3[k] - np.mean(v) for k, v in o.items()]) for o in st3])
-ax[2].plot(xs3, st3[:, 0], "s--", ms=3, lw=1, color=C["green"], label="disjoint-half surrogate")
+ax[2].plot(xs3, st3[:, 0], "s--", ms=3, lw=1, color=C["green"], label="disjoint half")
 ax[2].fill_between(xs3, st3[:, 1], st3[:, 2], color=C["green"], alpha=0.15, lw=0)
 ax[2].set_xlabel("decoy rate (% of traffic)"); ax[2].set_ylabel("recall lost vs. no decoys"); ax[2].set_title("(c) Decoy inflation"); ax[2].set_ylim(-0.1, 0.6)
-ax[2].legend(frameon=False, loc="upper left", handletextpad=0.3, borderpad=0.1)
+ax[2].set_ylim(-0.1, 0.85); ax[2].legend(frameon=False, loc="upper left", handletextpad=0.3, borderpad=0.1, fontsize=6, labelspacing=0.25, ncol=2, columnspacing=0.6)
 
 # (d) burst timeline
 T = json.load(open("round7_cleanwin_multi77_raw.json"))["timeline"]["wed21_18"]
