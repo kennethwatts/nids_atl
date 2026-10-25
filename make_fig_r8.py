@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({"font.size": 8, "axes.titlesize": 8.5, "axes.labelsize": 8, "xtick.labelsize": 7.5, "ytick.labelsize": 7.5,
                      "legend.fontsize": 7, "axes.spines.top": False, "axes.spines.right": False, "font.family": "DejaVu Sans"})
 C = {"blue": "#1F5FBF", "orange": "#C8561B", "green": "#2E7D5B", "gray": "#6B7280", "purple": "#7A4FB5"}
-fig, ax = plt.subplots(1, 4, figsize=(7.1, 1.95))
+fig, ax = plt.subplots(1, 4, figsize=(7.1, 1.85))
 
 # (a) dose-response
 d = pd.read_csv("round7_dose_summary.csv")
