@@ -1,0 +1,14 @@
+{
+ "params": 3041,
+ "model_kb": 11.87890625,
+ "aqt_buffer_kb": 1.953125,
+ "adam_state_kb": 23.7578125,
+ "score_single_us": 22.689077499990162,
+ "score_batch_us": 0.08123110000042288,
+ "aqt_np_quantile_us": 54.47813733333835,
+ "aqt_sorted_window_us": 0.6111228717949976,
+ "ft_persistent_us": 420.35013200001003,
+ "ft_reset_us": 542.6752090000377,
+ "cpu": "x86_64",
+ "torch": "2.15.0+cu132"
+}
